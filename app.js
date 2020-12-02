@@ -38,6 +38,8 @@ app.use(
 );
 
 app.post('/register', (req, res) => {
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
     const email = req.body.email;
     const password = req.body.password;
     bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -45,6 +47,8 @@ app.post('/register', (req, res) => {
             console.log(err);
         }
         let newUser = models.User.build({
+            first_name: firstName,
+            last_name: lastName,
             email: email,
             password: hash
         })
