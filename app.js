@@ -5,11 +5,9 @@ const cors = require("cors");
 const bodyParser = require('body-parser')
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-
+const dashboardRouter = require('./routes/dashboard')
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-
-
 const app = express()
 const PORT = 8080
 const models = require('./models')
@@ -36,6 +34,8 @@ app.use(
         },
     })
 );
+
+app.use('/dashboard', dashboardRouter)
 
 app.post('/register', (req, res) => {
     const firstName = req.body.firstName
