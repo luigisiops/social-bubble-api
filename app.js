@@ -1,42 +1,53 @@
-const express = require('express')
-const { brotliCompressSync } = require('zlib')
+// dependencies
+const cors = require("cors")
+const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
+const session = require("express-session")
+const bcrypt = require("bcrypt")
+const express = require("express")
+const { brotliCompressSync } = require("zlib")
 
-const cors = require("cors");
-const bodyParser = require('body-parser')
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const dashboardRouter = require('./routes/dashboard')
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
+// routes
+const dashboardRouter = require("./routes/dashboard")
+const authRouter = require("./routes/auth")
+const bubbleRouter = require("./routes/bubbles")
+
+const models = require("./models")
+
+const saltRounds = 10
 const app = express()
 const PORT = 8080
-const models = require('./models')
 
-app.use(express.json());
+app.use(express.json())
 app.use(
-    cors({
-        origin: ["http://localhost:3000"],
-        methods: ["GET", "POST"],
-        credentials: true,
-    })
-);
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
+   cors({
+      origin: ["http://localhost:3000"],
+      methods: ["GET", "POST"],
+      credentials: true,
+   })
+)
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(
-    session({
-        key: "userId",
-        secret: "subscribe",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            expires: 60 * 60 * 24,
-        },
-    })
-);
+   session({
+      key: "userId",
+      secret: "subscribe",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+         expires: 60 * 60 * 24,
+      },
+   })
+)
 
-app.use('/dashboard', dashboardRouter)
+// routes
+app.use("/dashboard", dashboardRouter)
+app.use("./auth", authRouter)
+app.use("./bubbles", bubbleRouter)
 
+
+/* 
 app.post('/register', (req, res) => {
     const firstName = req.body.firstName
     const lastName = req.body.lastName
@@ -59,18 +70,17 @@ app.post('/register', (req, res) => {
 
     });
     res.send(console.log('registering'))
-});
+}); */
 
-app.get("/login", (req, res) => {
+/* app.get("/login", (req, res) => {
     if (req.session.user) {
         res.send({ loggedIn: true, user: req.session.user });
     } else {
         res.send({ loggedIn: false });
     }
-});
+}); */
 
-
-app.post("/login", async (req, res) => {
+/* app.post("/login", async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -96,8 +106,9 @@ app.post("/login", async (req, res) => {
         res.send({ message: "User doesn't exist" });
     }
 }
-);
+); */
 
+// LISTENER
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
+   console.log(`Server is running on port ${PORT}`)
 })
