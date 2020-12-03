@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 const bcrypt = require("bcrypt")
+const saltRounds = 10
 
 
 router.post("/register", (req, res) => {
@@ -20,11 +21,10 @@ router.post("/register", (req, res) => {
          password: hash,
       })
 
-      newUser.save().then(() => {
-         res.send(console.log("Sent"))
-      })
+      //newUser.save().then(() => {
+         res.send(newUser)
+      //})
    })
-   res.send(console.log("registering"))
 })
 
 router.get("/login", (req, res) => {

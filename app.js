@@ -13,7 +13,6 @@ const bubbleRouter = require("./routes/bubbles")
 
 const models = require("./models")
 
-const saltRounds = 10
 const app = express()
 const PORT = 8080
 
