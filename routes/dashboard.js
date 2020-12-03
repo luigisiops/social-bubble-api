@@ -4,7 +4,17 @@ const models = require('../models')
 
 router.get('/', (req, res) => {
     models.User.findOne({
-        where: {user_id: req.body.user_id}
+        where: {id: req.body.id}
+    }).then((user) => {
+        res.json(user)
+    })
+})
+
+router.get('/bubbles', (req,res) => {
+    models.BubbleUser.findAll({
+        where: {user: req.body.id}
+    }).then((bubbles) => {
+        res.json(bubbles)
     })
 })
 
