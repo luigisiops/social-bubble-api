@@ -15,7 +15,9 @@ module.exports = (sequelize, DataTypes) => {
         as: 'bubbles',
         foreignKey: 'user',
         otherKey: 'bubble'
-      })    }
+      }),
+      User.hasMany(models.Post, {foreignKey: 'user_id'})    
+    }
   };
   User.init({
     first_name: DataTypes.STRING,
