@@ -1,6 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const models = require("../models")
+const bcrypt = require("bcrypt")
+
 
 router.post("/register", (req, res) => {
    const firstName = req.body.firstName

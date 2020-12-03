@@ -3,7 +3,6 @@ const cors = require("cors")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
-const bcrypt = require("bcrypt")
 const express = require("express")
 const { brotliCompressSync } = require("zlib")
 
@@ -43,8 +42,8 @@ app.use(
 
 // routes
 app.use("/dashboard", dashboardRouter)
-app.use("./auth", authRouter)
-app.use("./bubbles", bubbleRouter)
+app.use("/auth", authRouter)
+app.use("/bubble", bubbleRouter)
 
 
 /* 

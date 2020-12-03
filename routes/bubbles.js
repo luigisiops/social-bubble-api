@@ -2,38 +2,35 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 
-router.get("/", (req, res) => {
-   models.BubbleUser.findAll({
-      where: { user: req.body.id },
-   }).then((bubbles) => {
-      res.json(bubbles)
+router.get("/", async (req, res) => {
+   let id = req.body.id
+
+   if (id) {
+      const data = await models.Bubble.findOne({ where: { id: id } })
+      res.send(data)
+   }
+   res.status(404).send({
+      message: 'Error: missing bubble id'
    })
 })
 
-router.post("/create-bubble", (res, req) => {
+router.post("/create-bubble", (req, res) => {
    let title = req.body.title
    let user = req.body.id
 
-   let bubble = models.Bubble.build({
-      title: title,
-      bubble_status: "green",
-   })
-
-   let bubbleUser = models.BubbleUser.build({})
-
-   bubble.save().then(() => {
-
-   })
-
-
-   /*       .then(() => {})
-      .then(() => {
-         res.redirect("/create-bubble-user", {
-            user: user,
-         })
-      }) */
+   if (user) {
+      let bubble = models.Bubble.build({
+         title: title,
+         bubble_status: "green",
+      })
+      res.send(bubble)
+   }
+   else {
+      res.status(404).send({
+         message: 'Error: user id cannot be null'
+      })
+   }
 })
-
 
 router.post
 
