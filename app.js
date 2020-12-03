@@ -5,13 +5,15 @@ const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const express = require("express")
 const { brotliCompressSync } = require("zlib")
+const models = require("./models")
 
 // routes
 const dashboardRouter = require("./routes/dashboard")
 const authRouter = require("./routes/auth")
-const bubbleRouter = require("./routes/bubbles")
+const bubbleRouter = require("./routes/bubble")
+const postRouter = require("./routes/post")
 
-const models = require("./models")
+
 
 const app = express()
 const PORT = 8080
@@ -43,6 +45,7 @@ app.use(
 app.use("/dashboard", dashboardRouter)
 app.use("/auth", authRouter)
 app.use("/bubble", bubbleRouter)
+app.use("/post", postRouter)
 
 
 /* 

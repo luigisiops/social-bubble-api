@@ -15,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'users',
         foreignKey: 'bubble',
         otherKey: 'user'
+      }),
+      Bubble.belongsToMany(models.Post, {
+        through: 'Bubblepost',
+        as: 'posts',
+        foreignKey: 'bubble_id',
+        otherKey: 'post_id'
       })
     }
   };
