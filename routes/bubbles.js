@@ -37,4 +37,4 @@ router.post("/create-bubble", (res, req) => {
 
 router.post
 
-router.module.exports = router
+module.exports = router
