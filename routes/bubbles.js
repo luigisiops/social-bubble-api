@@ -4,23 +4,24 @@ const models = require("../models")
 
 //get list of all users bubbles
 router.get("/", async (req, res) => {
-   let userId = 10
+   let userid = 10
+   let bubbleArray = []
       const bubbleUsers = await models.BubbleUser.findAll({
          where:{
-            user: userId
+            user: userid
          }
       })
 
-      console.log(bubbleUsers)
+      
    for (const bubbleUser of bubbleUsers){
      const test = await models.Bubble.findOne({
          where:{
             id: bubbleUser.bubble
          }
       })
-      console.log(test)
+      bubbleArray.push(test)
    }
-   res.send('afjksaf')
+   res.send(bubbleArray)
 
    })
    
@@ -31,7 +32,7 @@ router.get("/:id", async (req, res) => {
    let id = req.params.id
 
    if (id) {
-      const data = await models.Bubble.find({ where: { id: id } })
+      const data = await models.Bubble.findOne({ where: { id: id } })
       res.send(data)
    }
    res.status(404).send({
@@ -39,14 +40,38 @@ router.get("/:id", async (req, res) => {
    })
 })
 
+//Fetches all users in a bubble
+router.get("/:bubbleid/users", async (req, res) => {
+   let id = req.params.bubbleid
+   let userArray = []
+   
+      const bubbleUsers = await models.BubbleUser.findAll({
+         where:{
+            bubble: id
+         }
+      })
+
+      for (const bubbleUser of bubbleUsers){
+         const user = await models.User.findOne({
+             where:{
+                id: bubbleUser.user
+             }
+          })
+          userArray.push(user)
+       }
+      res.send(userArray)
+
+})
+
+
 router.post("/create-bubble", async (req, res) => {
-   let title = 'some Bubble'
-   let user = 1
+   let title = 'new Bubble'
+   let user = 8
 
 //mad dumb but build doesnt define the id in the promise but create does also create saves to db without save method(findOneOrCreate also works)
    if (user) {
       let createBubble = await models.Bubble.create({
-            title: 'some bubble',
+            title: title,
             bubble_status: "green",
       })
 
@@ -90,19 +115,12 @@ router.post("/:bubbleId/bubbleuser", async (req, res) => {
    let bubbleId = req.params.bubbleId
  
 //kept as build and not create so you can test
-   if (bubbleId) {
-      let bubbleMod = await models.BubbleUser.build({
+      let bubbleMod = await models.BubbleUser.create({
          user: user,
          bubble: bubbleId,
          isAccepted: false,
       })
       res.send(bubbleMod)
-   }
-   else {
-      res.status(404).send({
-         message: 'Error: user id cannot be null'
-      })
-   }
 })
 
 router.post

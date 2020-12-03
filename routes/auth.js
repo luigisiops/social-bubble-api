@@ -14,7 +14,7 @@ router.post("/register", (req, res) => {
       if (err) {
          console.log(err)
       }
-      let newUser = models.User.build({
+      let newUser = models.User.create({
          first_name: firstName,
          last_name: lastName,
          email: email,
@@ -51,7 +51,6 @@ router.post("/login", async (req, res) => {
       bcrypt.compare(password, user.password, (error, response) => {
          if (response) {
             req.session.user = user
-            console.log(req.session.user)
             res.send(user)
          } else {
             res.send({ message: "Wrong email/password combination!" })
