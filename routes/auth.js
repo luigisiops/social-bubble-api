@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 const bcrypt = require("bcrypt")
+const session = require("express-session");
 const saltRounds = 10
 
 
@@ -47,19 +48,41 @@ router.post("/login", async (req, res) => {
    if (user === null) {
       res.send("error")
    }
-   if (user != null) {
-      bcrypt.compare(password, user.password, (error, response) => {
-         if (response) {
-            req.session.user = user
-            console.log(req.session.user)
-            res.send(user)
-         } else {
-            res.send({ message: "Wrong email/password combination!" })
-         }
-      })
-   } else {
-      res.send({ message: "User doesn't exist" })
-   }
-})
+   if (user.length > 0) {
+      bcrypt.compare(password, result[0].password, (error, response) => {
+        if (response) {
+          // WE WANT THE ID BECAUSE WE NEED TO CREATE OUR TOKEN WITH THAT
+          const id = result[0].id
+          // IMPORTANT: WE NEED TO PUT jwtSecret from line 96 in the .env file and pass it in through a variable 
+          const token = jwt.sign({id}, "jwtSecret", {
+            // VALUE FOR TOKEN EXPIRATION 300= 5 minutes
+            expiresIn: 300,
+          })
+          req.session.user = result;
+          // WE HAVE TO SEND TOKEN TO FRONT END
+        // check if user is authorized then pass token we createad and pass all results all info from users: id, username, role, group whatever.
+          res.json({
+            auth: true, 
+            token: token, 
+            result: result
+          });
+          console.log(req.session.user);
+        } else {
+          res.json({
+            // if it exists but password is wrong send message
+            auth: false, 
+            message: "wrong username or password."
+          });
+        }
+      });
+    } else {
+      // if it doesnt exist send message.
+     res.json({
+       auth: false, 
+       message: "no user exists. please check user name or register."
+      });
+    }
+  });
+
 
 module.exports = router

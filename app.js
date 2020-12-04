@@ -40,6 +40,25 @@ app.use(
 )
 
 // routes
+const verifyJWT = (req, res, next) => {
+    const token = req.headers["x-access-token"]
+  
+    if (!token){
+      res.send("Yo! we need a token, try again.")
+    } else {
+      jwt.verify(token, "jwtSecret", (err, decoded) => {
+        if (err) {
+          res.json({auth: false, message: "Failed to authenticate!"});
+        } else {
+          req.userId = decoded.id;
+          next();
+        }
+      });
+    }
+  };
+app.get('/isUserAuth', verifyJWT, (req, res) => {
+    res.send("Authentication Confirmed. OMW2FYB")
+  })
 app.use("/dashboard", dashboardRouter)
 app.use("/auth", authRouter)
 app.use("/bubble", bubbleRouter)
