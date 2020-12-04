@@ -8,10 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      post_id: {
+      PostId: {
         type: Sequelize.INTEGER, references: {model: 'Posts', field: 'id'}
       },
-      bubble_id: {
+      BubbleId: {
         type: Sequelize.INTEGER, references: {model: 'Bubbles', field: 'id'}
       },
       createdAt: {

@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      models.Bubblepost.belongsTo(models.Post)
     }
   };
   Bubblepost.init({
-    post_id: DataTypes.INTEGER,
-    bubble_id: DataTypes.INTEGER
+    PostId: DataTypes.INTEGER,
+    BubbleId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Bubblepost',

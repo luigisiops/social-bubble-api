@@ -10,13 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Post.belongsToMany(models.Bubble, {
-        through: 'Bubblepost',
-        as: 'bubbles',
-        foreignKey: 'post_id',
-        otherKey: 'bubble_id'
-      })
+      models.Post.hasMany(models.Bubblepost, {forgeinKey: "PostId"}),
+      models.Post.hasOne(models.User)
     }
+  
   };
   Post.init({
     user_id: DataTypes.INTEGER,
