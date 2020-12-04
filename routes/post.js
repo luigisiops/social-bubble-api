@@ -2,9 +2,18 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 
-router.post("/", async (req, res) => {
-    let body = 'new Post'
-    let user = 8
+router.get("/", async (req,res) => {
+    let bubble_id = req.body.bubble_id
+    const posts = await models.Bubblepost.findAll({  
+      where: { BubbleId:bubble_id}, include: 
+      [{model: models.Post}]
+   })
+    res.send(posts)
+})
+
+router.post("/create-post", async (req, res) => {
+    let body = req.body.body
+    let user = req.body.user_id
     let bubbles = [
         {
           "id": 3,
@@ -34,8 +43,8 @@ router.post("/", async (req, res) => {
        
        for (const bubble of bubbles){
        let bubblepost = models.Bubblepost.create({
-          post_id: postid,
-          bubble_id: bubble.id,
+          PostId: postid,
+          BubbleId: bubble.id,
        })
     }
        res.send('Post Successful')
