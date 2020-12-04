@@ -3,8 +3,8 @@ const router = express.Router()
 const models = require("../models")
 
 //get list of all users bubbles
-router.get("/", async (req, res) => {
-   let userid = 10
+router.get("/:id", async (req, res) => {
+   let userid = req.params.id
    let bubbleArray = []
       const bubbleUsers = await models.BubbleUser.findAll({
          where:{
