@@ -2,8 +2,8 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 
-router.get("/", async (req,res) => {
-    let bubble_id = req.body.bubble_id
+router.get("/:id", async (req,res) => {
+    let bubble_id = req.params.id
     const posts = await models.Bubblepost.findAll({  
       where: { BubbleId:bubble_id}, include: 
       [{model: models.Post}]
