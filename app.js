@@ -15,6 +15,7 @@ const models = require("./models")
 
 const app = express()
 const PORT = 8080
+const jwt = require('jsonwebtoken')
 
 app.use(express.json())
 app.use(
@@ -29,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(
    session({
-      key: "userId",
+      key: "email",
       secret: "subscribe",
       resave: false,
       saveUninitialized: false,

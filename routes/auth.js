@@ -5,7 +5,20 @@ const bcrypt = require("bcrypt")
 const session = require("express-session");
 const saltRounds = 10
 
+const jwt = require('jsonwebtoken')
 
+
+router.use(
+   session({
+      key: "userId",
+      secret: "subscribe",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+         expires: 60 * 60 * 24,
+      },
+   })
+)
 router.post("/register", (req, res) => {
    const firstName = req.body.firstName
    const lastName = req.body.lastName
@@ -16,18 +29,34 @@ router.post("/register", (req, res) => {
          console.log(err)
       }
       let newUser = models.User.build({
+         id: "",
          first_name: firstName,
          last_name: lastName,
          email: email,
          password: hash,
       })
 
-      //newUser.save().then(() => {
+   newUser.save().then(() => {
          res.send(newUser)
-      //})
+      }) 
    })
 })
-
+// const verifyJWT = (req, res, next) => {
+//    const token = req.headers["x-access-token"]
+ 
+//    if (!token){
+//      res.send("Yo! we need a token, try again.")
+//    } else {
+//      jwt.verify(token, "jwtSecret", (err, decoded) => {
+//        if (err) {
+//          res.json({auth: false, message: "Failed to authenticate!"});
+//        } else {
+//          req.userId = decoded.id;
+//          next();
+//        }
+//      });
+//    }
+//  };
 router.get("/login", (req, res) => {
    if (req.session.user) {
       res.send({ loggedIn: true, user: req.session.user })
@@ -49,10 +78,10 @@ router.post("/login", async (req, res) => {
       res.send("error")
    }
    if (user.length > 0) {
-      bcrypt.compare(password, result[0].password, (error, response) => {
+      bcrypt.compare(password, user[0].password, (error, response) => {
         if (response) {
           // WE WANT THE ID BECAUSE WE NEED TO CREATE OUR TOKEN WITH THAT
-          const id = result[0].id
+          const id = user[0].id
           // IMPORTANT: WE NEED TO PUT jwtSecret from line 96 in the .env file and pass it in through a variable 
           const token = jwt.sign({id}, "jwtSecret", {
             // VALUE FOR TOKEN EXPIRATION 300= 5 minutes
