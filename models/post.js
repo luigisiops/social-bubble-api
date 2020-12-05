@@ -10,8 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.Post.hasMany(models.Bubblepost, {forgeinKey: "PostId"}),
-      models.Post.hasOne(models.User)
+      models.Post.hasMany(models.Bubblepost, {forgeinKey: "PostId"})
     }
   
   };
