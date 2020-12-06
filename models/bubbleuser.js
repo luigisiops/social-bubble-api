@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   BubbleUser.init({
-    user: DataTypes.INTEGER,
-    bubble: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
+    BubbleId: DataTypes.INTEGER,
     isAccepted: DataTypes.BOOLEAN
   }, {
     sequelize,
