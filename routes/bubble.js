@@ -23,7 +23,7 @@ router.get("/:bubbleid/users", async (req, res) => {
    
       const bubbleUsers = await models.BubbleUser.findAll({
          where:{
-            bubble: id
+            BubbleId: id
          }
       })
 
@@ -55,9 +55,9 @@ router.post("/create-bubble", async (req, res) => {
       const bubbleId = bubble.id
       console.log(bubble.id)
 
-      let bubbleMod = models.BubbleUser.create({
-         user: user,
-         bubble: bubbleId,
+      let bubbleMod = await models.BubbleUser.create({
+         User: user,
+         BubbleId: bubbleId,
          isAccepted: true,
       })
       res.send(bubble)
@@ -77,8 +77,8 @@ router.get("/:bubbleId/bubbleuser/:userId", async (req, res) => {
    if(bubbleId && userId){
       let bubbleUser = await models.BubbleUser.findOne({
          where:{
-            bubble: bubbleId,
-            user: userId
+            BubbleId: bubbleId,
+            UserId: userId
          }
       })
       res.send(bubbleUser)
@@ -92,8 +92,8 @@ router.post("/:bubbleId/bubbleuser", async (req, res) => {
  
 //kept as build and not create so you can test
       let bubbleMod = await models.BubbleUser.create({
-         user: user,
-         bubble: bubbleId,
+         UserId: user,
+         BubbleId: bubbleId,
          isAccepted: false,
       })
       res.send(bubbleMod)
@@ -107,8 +107,8 @@ router.post("/:bubbleid/remove-user/:userid", (req, res) => {
 
    models.BubbleUser.destroy({
       where: {
-         user: userid,
-         bubble: bubbleid 
+         UserId: userid,
+         BubbleId: bubbleid 
       }
    }).then(() => {
       res.send('User Deleted From Bubble')
@@ -122,10 +122,16 @@ router.post("/:bubbleid/delete-bubble", async(req,res) => {
    
    await models.BubbleUser.destroy({
       where: {
-         bubble: bubbleid
+         BubbleId: bubbleid
       }
    })
    
+   await models.Bubblepost.destroy({
+      where: {
+         BubbleId: bubbleid
+      }
+   })
+
    await models.Bubble.destroy({
       where: {
          id: bubbleid

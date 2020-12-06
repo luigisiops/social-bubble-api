@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.belongsToMany(models.Bubble, {
-        through: 'BubbleUsers',
-        as: 'bubbles',
-        foreignKey: 'user',
-        otherKey: 'bubble'
-      })
+      // User.belongsToMany(models.Bubble, {
+      //   through: 'BubbleUsers',
+      //   as: 'bubbles',
+      //   foreignKey: 'user',
+      //   otherKey: 'bubble'
+      // })
  
     }
   };
