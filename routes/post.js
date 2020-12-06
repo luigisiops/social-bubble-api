@@ -16,7 +16,7 @@ router.post("/create-post", async (req, res) => {
     let user = req.body.user_id
     let bubbles = [
         {
-          "id": 3,
+          "id": 2,
           "title": "deez",
           "bubble_status": "green",
           "createdAt": "2020-12-03T08:46:13.339Z",
