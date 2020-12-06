@@ -10,7 +10,7 @@ router.get("/:userid/bubbles", async (req, res) => {
     let bubbleArray = []
        const bubbleUsers = await models.BubbleUser.findAll({
           where:{
-             user: userid
+             UserId: userid
           }
        })
  
@@ -18,7 +18,7 @@ router.get("/:userid/bubbles", async (req, res) => {
     for (const bubbleUser of bubbleUsers){
       const test = await models.Bubble.findOne({
           where:{
-             id: bubbleUser.bubble
+             id: bubbleUser.BubbleId
           }
        })
        bubbleArray.push(test)
