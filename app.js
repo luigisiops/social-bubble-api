@@ -12,6 +12,7 @@ const dashboardRouter = require("./routes/dashboard")
 const authRouter = require("./routes/auth")
 const bubbleRouter = require("./routes/bubble")
 const postRouter = require("./routes/post")
+const userRouter = require("./routes/user")
 
 
 
@@ -46,6 +47,7 @@ app.use("/dashboard", dashboardRouter)
 app.use("/auth", authRouter)
 app.use("/bubble", bubbleRouter)
 app.use("/post", postRouter)
+app.use("/user", userRouter)
 
 
 /* 

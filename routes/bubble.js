@@ -2,30 +2,6 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 
-//get list of all users bubbles
-router.get("/:id", async (req, res) => {
-   let userid = req.params.id
-   let bubbleArray = []
-      const bubbleUsers = await models.BubbleUser.findAll({
-         where:{
-            user: userid
-         }
-      })
-
-      
-   for (const bubbleUser of bubbleUsers){
-     const test = await models.Bubble.findOne({
-         where:{
-            id: bubbleUser.bubble
-         }
-      })
-      bubbleArray.push(test)
-   }
-   res.send(bubbleArray)
-
-   })
-   
-
 
 //get specific bubble
 router.get("/:id", async (req, res) => {
@@ -121,6 +97,45 @@ router.post("/:bubbleId/bubbleuser", async (req, res) => {
          isAccepted: false,
       })
       res.send(bubbleMod)
+})
+
+
+//removes user from a bubble
+router.post("/:bubbleid/remove-user/:userid", (req, res) => {
+   let bubbleid = req.params.bubbleid
+   let userid = req.params.userid
+
+   models.BubbleUser.destroy({
+      where: {
+         user: userid,
+         bubble: bubbleid 
+      }
+   }).then(() => {
+      res.send('User Deleted From Bubble')
+   })
+
+})
+  
+//deletes the bubble
+router.post("/:bubbleid/delete-bubble", async(req,res) => {
+   let bubbleid = req.params.bubbleid
+   
+   await models.BubbleUser.destroy({
+      where: {
+         bubble: bubbleid
+      }
+   })
+   
+   await models.Bubble.destroy({
+      where: {
+         id: bubbleid
+      }
+   })
+
+
+
+   res.send('Bubble Successfully Deleted')
+
 })
 
 router.post
