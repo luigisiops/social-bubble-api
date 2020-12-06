@@ -8,10 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user: {
+      UserId: {
         type: Sequelize.INTEGER, references: {model: 'Users', field: 'id'}
       },
-      bubble: {
+      BubbleId: {
         type: Sequelize.INTEGER, references: {model: 'Bubbles', field: 'id'}
       },
       isAccepted: {

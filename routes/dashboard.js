@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 
 router.get('/bubbles', (req,res) => {
     models.BubbleUser.findAll({
-        where: {user: req.body.id}
+        where: {UserId: req.body.id}
     }).then((bubbles) => {
         res.json(bubbles)
     })
