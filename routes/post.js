@@ -18,7 +18,7 @@ router.post("/create-post", async (req, res) => {
         {
           "id": 3,
           "title": "deez",
-          "bubble_status": "blue",
+          "bubble_status": "green",
           "createdAt": "2020-12-03T08:46:13.339Z",
           "updatedAt": "2020-12-03T08:46:13.339Z"
         },
@@ -30,6 +30,8 @@ router.post("/create-post", async (req, res) => {
           "updatedAt": "2020-12-03T09:03:22.631Z"
         }
       ]
+   
+      
  
  //mad dumb but build doesnt define the id in the promise but create does also create saves to db without save method(findOneOrCreate also works)
     if (user) {
