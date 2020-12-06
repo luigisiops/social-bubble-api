@@ -2,15 +2,15 @@
 const jwt = require('jsonwebtoken');
 
 // users hardcoded for simplicity, store in a db for production applications
-const users = [{ id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' }];
+const users = [{ id: 1, email: 'test5@email.com', password: 'test', firstName: 'test5', lastName: 'test5' }];
 
 module.exports = {
     authenticate,
     getAll
 };
 
-async function authenticate({ username, password }) {
-    const user = users.find(u => u.username === username && u.password === password);
+async function authenticate({ email, password }) {
+    const user = users.find(u => u.email === email && u.password === password);
 
     if (!user) throw 'Username or password is incorrect';
 
