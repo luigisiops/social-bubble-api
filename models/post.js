@@ -11,11 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       models.Post.hasMany(models.Bubblepost, {forgeinKey: "PostId"})
+      models.Post.belongsTo(models.User)
     }
   
   };
   Post.init({
-    user_id: DataTypes.INTEGER,
+    UserId: DataTypes.INTEGER,
     body: DataTypes.TEXT
   }, {
     sequelize,

@@ -2,15 +2,24 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 
-router.get("/:id", async (req,res) => {
-    let bubble_id = req.params.id
+
+//Returns all posts for one bubble
+router.get("/:bubbleid", async (req,res) => {
+    let bubble_id = req.params.bubbleid
     const posts = await models.Bubblepost.findAll({  
       where: { BubbleId:bubble_id}, include: 
-      [{model: models.Post}]
+      [{
+         model: models.Post,
+            include:[
+               models.User
+            ]}
+      ]
    })
     res.send(posts)
 })
 
+
+//Create Post
 router.post("/create-post", async (req, res) => {
     let body = req.body.body
     let user = req.body.user_id
@@ -38,8 +47,8 @@ router.post("/create-post", async (req, res) => {
  //mad dumb but build doesnt define the id in the promise but create does also create saves to db without save method(findOneOrCreate also works)
     if (user) {
        let createPost = await models.Post.create({
-             user_id: user,
-             body:body
+             UserId: user,
+             body: body
        })
  
        let post = createPost
