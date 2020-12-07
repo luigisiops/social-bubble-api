@@ -39,13 +39,12 @@ router.get("/:bubbleid/users", async (req, res) => {
 
 })
 
-
+//create Bubble
 router.post("/create-bubble", async (req, res) => {
    let title = req.body.title
    //will pass user id from React/Redux
-   let user = 10
+   let user = 21
 
-//mad dumb but build doesnt define the id in the promise but create does also create saves to db without save method(findOneOrCreate also works)
    if (user) {
       let createBubble = await models.Bubble.create({
             title: title,
@@ -57,9 +56,10 @@ router.post("/create-bubble", async (req, res) => {
       console.log(bubble.id)
 
       let bubbleMod = await models.BubbleUser.create({
-         User: user,
+         UserId: user,
          BubbleId: bubbleId,
          isAccepted: true,
+         owner: true
       })
       res.send(bubble)
    }
@@ -90,14 +90,14 @@ router.get("/:bubbleId/bubbleuser/:userId", async (req, res) => {
 router.post("/:bubbleId/bubbleuser", async (req, res) => {
    let user = req.body.user
    let bubbleId = req.params.bubbleId
- 
-//kept as build and not create so you can test
-      let bubbleMod = await models.BubbleUser.create({
-         UserId: user,
-         BubbleId: bubbleId,
-         isAccepted: false,
-      })
-      res.send(bubbleMod)
+
+   let bubbleMod = await models.BubbleUser.create({
+      UserId: user,
+      BubbleId: bubbleId,
+      isAccepted: false,
+      owner: false
+   })
+   res.send(bubbleMod)
 })
 
 

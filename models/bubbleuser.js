@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   BubbleUser.init({
     UserId: DataTypes.INTEGER,
     BubbleId: DataTypes.INTEGER,
-    isAccepted: DataTypes.BOOLEAN
+    isAccepted: DataTypes.BOOLEAN,
+    owner: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'BubbleUser',

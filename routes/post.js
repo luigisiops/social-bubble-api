@@ -65,4 +65,24 @@ router.post("/create-post", async (req, res) => {
 }
 })
 
+//delete post
+router.post("/:postid/delete-post", async(req,res) => {
+   let postid = req.params.postid
+   
+   await models.Bubblepost.destroy({
+      where: {
+         PostId: postid
+      }
+   })
+   
+   await models.Post.destroy({
+      where: {
+         id: postid
+      }
+   })
+
+   res.send('Post Successfully Deleted')
+
+})
+
 module.exports = router
