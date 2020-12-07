@@ -1,72 +1,142 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import 'App.css';
+// dependencies
+const cors = require("cors")
+const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
+const session = require("express-session")
+const express = require("express")
+const { brotliCompressSync } = require("zlib")
+const app = express();
+const models = require("./models");
+const auth = require("./middlewares/authMiddleware.js");
+const { Op } = require("sequelize");
+var jwt = require("jsonwebtoken");
+var bcrypt = require("bcryptjs");
+require("dotenv").config();
 
-const apiUrl = 'http://localhost:8080';
+app.use(cors());
+app.use(bodyParser.json());
 
-axios.interceptors.request.use(
-    config => {
-      const { origin } = new URL(config.url);
-      const allowedOrigins = [apiUrl];
-      const token = localStorage.getItem('token');
-      if (allowedOrigins.includes(origin)) {
-        config.headers.authorization = `Bearer ${token}`;
-      }
-      return config;
-    },
-    error => {
-      return Promise.reject(error);
-    }
-  );
+let router = express.Router();
+router.use(bodyParser.json());
+// routes
+const dashboardRouter = require("./routes/dashboard")
+const authRouter = require("./routes/auth")
+const bubbleRouter = require("./routes/bubbles")
+
+const PORT = 8080
+
+
+app.use(express.json())
+app.use(
+   cors({
+      origin: ["http://localhost:3000"],
+      methods: ["GET", "POST"],
+      credentials: true,
+   })
+)
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(
+   session({
+      key: "email",
+      secret: "subscribe",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+         expires: 60 * 60 * 24,
+      },
+   })
+)
+
+// routes
+const verifyJWT = (req, res, next) => {
+    const token = req.headers["x-access-token"]
   
-
-function App() {
-    const storedJwt = localStorage.getItem('token');
-    const [jwt, setJwt] = useState(storedJwt || null);
-    const [register, setFields] = useState([]);
-    // const [loginStatus, setLoginStatus] = useState(true);
-    const [fetchError, setFetchError] = useState(null);
-
-    const getJwt = async () => {
-        const { data } = await axios.get(`${apiUrl}/jwt`);
-        localStorage.setItem('token', data.token);
-        setJwt(data.token);
-      };
-    
-    const getFields = async () => {
-        try {
-          const { data } = await axios.get(`${apiUrl}/register`);
-          setFields(data);
-          setFetchError(null);
-        } catch (err) {
-          setFetchError(err.message);
+    if (!token){
+      res.send("Yo! we need a token, try again.")
+    } else {
+      jwt.verify(token, "jwtSecret", (err, decoded) => {
+        if (err) {
+          res.json({auth: false, message: "Failed to authenticate!"});
+        } else {
+          req.userId = decoded.id;
+          next();
         }
-      };
-      return (
-        <>
-          <section style={{ marginBottom: '10px' }}>
-            <button onClick={() => getJwt()}>Get JWT</button>
-            {jwt && (
-              <pre>
-                <code>{jwt}</code>
-              </pre>
-            )}
-          </section>
-          <section>
-            <button onClick={() => getFields()}>
-              Get Foods
-            </button>
-            <ul>
-              {register.map((field, i) => (
-                <li>{field.description}</li>
-              ))}
-            </ul>
-            {fetchError && (
-              <p style={{ color: 'red' }}>{fetchError}</p>
-            )}
-          </section>
-        </>
-      );
+      });
     }
-    
-    export default App;
+  };
+app.get('/isUserAuth', verifyJWT, (req, res) => {
+    res.send("Authentication Confirmed. OMW2FYB")
+  })
+app.use("/dashboard", dashboardRouter)
+//importing router
+app.use("/auth", authRouter)
+app.use("/bubble", bubbleRouter)
+
+
+
+app.post('/register', (req, res) => {
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const email = req.body.email;
+    const password = req.body.password;
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+        if (err) {
+            console.log(err);
+        }
+        let newUser = models.User.build({
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: hash
+        })
+
+        newUser.save().then(() => {
+            res.send(console.log('Sent'))
+        })
+
+    });
+    res.send(console.log('registering'))
+}); 
+
+app.get("/login", (req, res) => {
+    if (req.session.user) {
+        res.send({ loggedIn: true, user: req.session.user });
+    } else {
+        res.send({ loggedIn: false });
+    }
+}); 
+
+app.post("/login", async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    let user = await models.User.findOne({
+        where: {
+            email: email
+        }
+    })
+    if (user === null) {
+        res.send('error');
+    }
+    if (user != null) {
+        bcrypt.compare(password, user.password, (error, response) => {
+            if (response) {
+                req.session.user = user;
+                console.log(req.session.user);
+                res.send(user);
+            } else {
+                res.send({ message: "Wrong email/password combination!" });
+            }
+        });
+    } else {
+        res.send({ message: "User doesn't exist" });
+    }
+}
+);
+
+// LISTENER
+app.listen(PORT, () => {
+   console.log(`Server is running on port ${PORT}`)
+})

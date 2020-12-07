@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken')
 router.use(
    session({
       key: "userId",
-      secret: "subscribe",
+      secret: "jwtSecret",
       resave: false,
       saveUninitialized: false,
       cookie: {
