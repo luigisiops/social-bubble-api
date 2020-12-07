@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {   
       models.BubbleUser.belongsTo(models.Bubble)
+      models.BubbleUser.belongsTo(models.User)
     }
   };
   BubbleUser.init({

@@ -18,24 +18,17 @@ router.get("/:id", async (req, res) => {
 
 //Fetches all users in a bubble
 router.get("/:bubbleid/users", async (req, res) => {
-   let id = req.params.bubbleid
-   let userArray = []
+   let bubbleId = req.params.bubbleid
    
-      const bubbleUsers = await models.BubbleUser.findAll({
-         where:{
-            BubbleId: id
-         }
-      })
+   
+   let bubbleUsers = await models.BubbleUser.findAll({
+      where: {BubbleId: bubbleId}, include:
+      [{
+         model: models.User
+      }]
+   })
 
-      for (const bubbleUser of bubbleUsers){
-         const user = await models.User.findOne({
-             where:{
-                id: bubbleUser.UserId
-             }
-          })
-          userArray.push(user)
-       }
-      res.send(userArray)
+   res.send(bubbleUsers)
 
 })
 
@@ -97,20 +90,32 @@ router.post("/:bubbleId/bubbleuser", async (req, res) => {
       }
    })
    
-
    if(user){
-      let bubbleMod = await models.BubbleUser.create({
+      let InBubble = await models.BubbleUser.findOne({
+         where:{
+            UserId: user.id,
+            BubbleId: bubbleId
+         }
+      }) 
+
+      if(!InBubble){
+      let bubbleU = await models.BubbleUser.create({
          UserId: user.id,
          BubbleId: bubbleId,
          isAccepted: false,
          owner: false
       })
-      res.send(bubbleMod)
-   }else{
-      res.send('Email not associated with a user')
+      } 
    }
 
+   let bubbleUsers = await models.BubbleUser.findAll({
+      where: {BubbleId: bubbleId}, include:
+      [{
+         model: models.User
+      }]
+   })
 
+   res.send(bubbleUsers)
 
 
 })
