@@ -42,7 +42,8 @@ router.get("/:bubbleid/users", async (req, res) => {
 //create a bubble
 router.post("/create-bubble", async (req, res) => {
    let title = req.body.title
-   let user = 10
+   //will pass user id from React/Redux
+   let user = req.body.userId
 
 //mad dumb but build doesnt define the id in the promise but create does also create saves to db without save method(findOneOrCreate also works)
    if (user) {
