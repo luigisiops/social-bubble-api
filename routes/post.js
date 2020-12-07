@@ -14,6 +14,8 @@ router.get("/:id", async (req,res) => {
 router.post("/create-post", async (req, res) => {
     let body = req.body.body
     let user = req.body.user_id
+
+    //will pass bubbles from global redux
     let bubbles = [
         {
           "id": 2,
