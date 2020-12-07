@@ -27,23 +27,25 @@ router.get("/:userid/bubbles", async (req, res) => {
  
 })
 
+//change status of a user and their bubbles
 router.post("/:userid/update-status", async (req,res) => {
     const user_id = req.params.userid
     const status = req.body.status
     const bubbleArray = []
 
+    //will pass bubbles from global redux
     let bubbles = [
         {
             "id": 2,
             "title": "deez",
-            "bubble_status": "red",
+            "bubble_status": "green",
             "createdAt": "2020-12-03T08:46:13.339Z",
             "updatedAt": "2020-12-03T08:46:13.339Z"
         },
         {
             "id": 8,
             "title": "some bubble",
-            "bubble_status": "red",
+            "bubble_status": "green",
             "createdAt": "2020-12-03T09:03:22.631Z",
             "updatedAt": "2020-12-03T09:03:22.631Z"
         }
@@ -86,12 +88,10 @@ router.post("/:userid/update-status", async (req,res) => {
                 bubbleUsersArray.push(user)
                   
                 const redUsers = bubbleUsersArray.filter(user => user.status == "red")
-                //Red Users is empty but it wont move to the next if
-                if(redUsers == []){
+                if(redUsers.length == 0){
+                    
                     const yellowUsers = bubbleUsersArray.filter(user => user.status == "yellow")
-                    conslole.log(yellowUsers)
-                    console.log("yellow")
-                    if(yellowUsers == []){
+                    if(yellowUsers.length == 0){
                         const bubbleColorGreen = await models.Bubble.update(
                             {bubble_status: "green"},
                             {where: {id: bubble.id}}
@@ -109,13 +109,14 @@ router.post("/:userid/update-status", async (req,res) => {
                     )
                 }
         }
-        const userBubble = await models.Bubble.findOne({
-            where:{
-               id: bubble.id
-            }
-        })
-        bubbleArray.push(userBubble)
+
     }
+    const userBubble = await models.Bubble.findOne({
+        where:{
+           id: bubble.id
+        }
+    })
+    bubbleArray.push(userBubble)
 }
     return res.send({user:user, bubbles:bubbleArray})
     
