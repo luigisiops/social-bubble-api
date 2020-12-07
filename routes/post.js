@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 
+//get all posts for a bubble
 router.get("/:id", async (req,res) => {
     let bubble_id = req.params.id
     const posts = await models.Bubblepost.findAll({  

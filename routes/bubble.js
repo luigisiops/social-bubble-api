@@ -39,10 +39,10 @@ router.get("/:bubbleid/users", async (req, res) => {
 
 })
 
-
+//create a bubble
 router.post("/create-bubble", async (req, res) => {
    let title = req.body.title
-   let user = 8
+   let user = 10
 
 //mad dumb but build doesnt define the id in the promise but create does also create saves to db without save method(findOneOrCreate also works)
    if (user) {
@@ -56,7 +56,7 @@ router.post("/create-bubble", async (req, res) => {
       console.log(bubble.id)
 
       let bubbleMod = await models.BubbleUser.create({
-         User: user,
+         UserId: user,
          BubbleId: bubbleId,
          isAccepted: true,
       })
