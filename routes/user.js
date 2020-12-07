@@ -8,16 +8,19 @@ const models = require("../models")
 router.put('/:userid/status', async (req, res) => {
     let userid = req.params.userid
     // let userStatus = req.body.userStatus
-    
+
     // test status DELETE
     let userStatus = 'red'
 
     const userUpdate = await models.User.update(
         {user_status: userStatus},
-        {where: {id: userid}
+        {where: {id: userid},
+        returning: true,
+        plain: true
     })
+   
 
-    res.send(userUpdate)
+    res.send(userUpdate[1])
 })
 
 //get list of all user's bubbles
@@ -73,7 +76,7 @@ router.post("/:userid/update-status", async (req,res) => {
     }) 
     const user = await models.User.findOne({
         where: {id: user_id}
-}) 
+    }) 
 
     for(const bubble of bubbles){ 
         if (status == "red"){
