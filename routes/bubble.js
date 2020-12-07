@@ -88,16 +88,31 @@ router.get("/:bubbleId/bubbleuser/:userId", async (req, res) => {
 
 //add a new bubbleuser
 router.post("/:bubbleId/bubbleuser", async (req, res) => {
-   let user = req.body.user
+   let email = req.body.email
    let bubbleId = req.params.bubbleId
 
-   let bubbleMod = await models.BubbleUser.create({
-      UserId: user,
-      BubbleId: bubbleId,
-      isAccepted: false,
-      owner: false
+   let user = await models.User.findOne({
+      where:{
+         email:email
+      }
    })
-   res.send(bubbleMod)
+   
+
+   if(user){
+      let bubbleMod = await models.BubbleUser.create({
+         UserId: user.id,
+         BubbleId: bubbleId,
+         isAccepted: false,
+         owner: false
+      })
+      res.send(bubbleMod)
+   }else{
+      res.send('Email not associated with a user')
+   }
+
+
+
+
 })
 
 
