@@ -4,6 +4,22 @@ const router = express.Router()
 const models = require("../models")
 
 
+// update user status on dashboard
+router.put('/:userid/status', async (req, res) => {
+    let userid = req.params.userid
+    // let userStatus = req.body.userStatus
+    
+    // test status DELETE
+    let userStatus = 'red'
+
+    const userUpdate = await models.User.update(
+        {user_status: userStatus},
+        {where: {id: userid}
+    })
+
+    res.send(userUpdate)
+})
+
 //get list of all user's bubbles
 router.get("/:userid/bubbles", async (req, res) => {
     let userid = req.params.userid
