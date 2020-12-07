@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       models.User.hasMany(models.Post, {forgeinKey: "UserId"})
+      models.Bubble.hasMany(models.BubbleUser, {onDelete: 'cascade', hooks:true})
     }
   };
   User.init({
