@@ -10,14 +10,17 @@ router.put('/:userid/status', async (req, res) => {
     // let userStatus = req.body.userStatus
     
     // test status DELETE
-    let userStatus = 'red'
+    let userStatus = 'yellow'
 
     const userUpdate = await models.User.update(
         {user_status: userStatus},
-        {where: {id: userid}
+        {where: {id: userid},
+        returning: true,
+        plain: true
     })
+    console.log(userUpdate)
 
-    res.send(userUpdate)
+    res.send(userUpdate[1])
 })
 
 //get list of all user's bubbles
@@ -27,7 +30,7 @@ router.get("/:userid/bubbles", async (req, res) => {
        const bubbleUsers = await models.BubbleUser.findAll({
           where:{
              UserId: userid
-          }
+          },
        })
  
        
