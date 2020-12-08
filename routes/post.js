@@ -66,7 +66,7 @@ router.post("/create-post", async (req, res) => {
 })
 
 //delete post
-router.post("/:postid/delete-post", async(req,res) => {
+router.delete("/:postid/delete-post", async(req,res) => {
    let postid = req.params.postid
    
    await models.Bubblepost.destroy({
