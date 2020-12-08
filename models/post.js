@@ -3,23 +3,24 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Bubble extends Model {
+  class Post extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      models.Bubble.hasMany(models.Bubblepost, {onDelete: 'cascade', hooks:true})
-      models.Bubble.hasMany(models.BubbleUser, {onDelete: 'cascade', hooks:true})
+      models.Post.hasMany(models.Bubblepost, {forgeinKey: "PostId"})
+      models.Post.belongsTo(models.User)
     }
+  
   };
-  Bubble.init({
-    title: DataTypes.STRING,
-    bubble_status: DataTypes.STRING
+  Post.init({
+    UserId: DataTypes.INTEGER,
+    body: DataTypes.TEXT
   }, {
     sequelize,
-    modelName: 'Bubble',
+    modelName: 'Post',
   });
-  return Bubble;
+  return Post;
 };

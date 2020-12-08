@@ -4,14 +4,17 @@ const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const express = require("express")
+const app = express()
+
+
 const { brotliCompressSync } = require("zlib")
-const app = express();
 const models = require("./models");
 const auth = require("./middlewares/authMiddleware.js");
 const { Op } = require("sequelize");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 require("dotenv").config();
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -21,7 +24,11 @@ router.use(bodyParser.json());
 // routes
 const dashboardRouter = require("./routes/dashboard")
 const authRouter = require("./routes/auth")
-const bubbleRouter = require("./routes/bubbles")
+const bubbleRouter = require("./routes/bubble")
+const postRouter = require("./routes/post")
+const userRouter = require("./routes/user")
+
+
 
 const PORT = 8080
 
@@ -73,6 +80,8 @@ app.use("/dashboard", dashboardRouter)
 //importing router
 app.use("/auth", authRouter)
 app.use("/bubble", bubbleRouter)
+app.use("/post", postRouter)
+app.use("/user", userRouter)
 
 
 

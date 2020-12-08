@@ -28,8 +28,7 @@ router.post("/register", (req, res) => {
       if (err) {
          console.log(err)
       }
-      let newUser = models.User.build({
-         // id: "",
+      let newUser = models.User.create({
          first_name: firstName,
          last_name: lastName,
          email: email,

@@ -1,21 +1,18 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('BubbleUsers', {
+    await queryInterface.createTable('Posts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      UserId: {
+      user_id: {
         type: Sequelize.INTEGER, references: {model: 'Users', field: 'id'}
       },
-      BubbleId: {
-        type: Sequelize.INTEGER, references: {model: 'Bubbles', field: 'id'}
-      },
-      isAccepted: {
-        type: Sequelize.BOOLEAN
+      body: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +25,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('BubbleUsers');
+    await queryInterface.dropTable('Posts');
   }
 };

@@ -10,12 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.belongsToMany(models.Bubble, {
-        through: 'BubbleUsers',
-        as: 'bubbles',
-        foreignKey: 'user',
-        otherKey: 'bubble'
-      })    }
+      models.User.hasMany(models.Post, {forgeinKey: "UserId"})
+      models.Bubble.hasMany(models.BubbleUser, {onDelete: 'cascade', hooks:true})
+    }
   };
   User.init({
     first_name: DataTypes.STRING,

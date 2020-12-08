@@ -9,14 +9,16 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate(models) {   
+      models.BubbleUser.belongsTo(models.Bubble)
+      models.BubbleUser.belongsTo(models.User)
     }
   };
   BubbleUser.init({
-    user: DataTypes.INTEGER,
-    bubble: DataTypes.INTEGER,
-    isAccepted: DataTypes.BOOLEAN
+    UserId: DataTypes.INTEGER,
+    BubbleId: DataTypes.INTEGER,
+    isAccepted: DataTypes.BOOLEAN,
+    owner: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'BubbleUser',
