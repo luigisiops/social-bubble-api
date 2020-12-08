@@ -2,7 +2,6 @@ const express = require("express")
 const router = express.Router()
 const models = require("../models")
 
-
 //Returns all posts for one bubble
 router.get("/:bubbleid", async (req,res) => {
     let bubble_id = req.params.bubbleid
