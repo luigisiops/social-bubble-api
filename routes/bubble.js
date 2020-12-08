@@ -122,7 +122,7 @@ router.post("/:bubbleId/bubbleuser", async (req, res) => {
 
 
 //removes user from a bubble
-router.post("/:bubbleid/remove-user/:userid", (req, res) => {
+router.delete("/:bubbleid/remove-user/:userid", (req, res) => {
    let bubbleid = req.params.bubbleid
    let userid = req.params.userid
 
@@ -138,7 +138,7 @@ router.post("/:bubbleid/remove-user/:userid", (req, res) => {
 })
   
 //deletes the bubble
-router.post("/:bubbleid/delete-bubble", async(req,res) => {
+router.delete("/:bubbleid/delete-bubble", async(req,res) => {
    let bubbleid = req.params.bubbleid
    
    await models.BubbleUser.destroy({
