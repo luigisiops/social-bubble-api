@@ -140,6 +140,7 @@ router.delete("/:bubbleid/remove-user/:userid", (req, res) => {
 //deletes the bubble
 router.delete("/:bubbleid/delete-bubble", async(req,res) => {
    let bubbleid = req.params.bubbleid
+   console.log(bubbleid)
    
    await models.BubbleUser.destroy({
       where: {
