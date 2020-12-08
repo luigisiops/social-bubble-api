@@ -63,16 +63,6 @@ router.post("/create-bubble", async (req, res) => {
    }
 })
 
-router.delete("/delete-bubble", async(req, res) => {
-   let bubbleId = req.body.id
-
-   if (id) {
-      let deleteBubble = await models.Bubble.delete({
-         where: {id: bubbleId}
-      })
-   }
-})
-
 //get specific instance of bubble user
 router.get("/:bubbleId/bubbleuser/:userId", async (req, res) => {
    let bubbleId = req.params.bubbleId
