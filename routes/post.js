@@ -21,7 +21,7 @@ router.get("/:bubbleid", async (req,res) => {
 //Create Post
 router.post("/create-post/:bubbleid", async (req, res) => {
     let body = req.body.body
-    let user = req.body.user_ids
+    let user = req.body.user_id
     let bubbleId = req.params.bubbleid
 
    

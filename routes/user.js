@@ -131,7 +131,7 @@ router.post("/:userid/update-status", async (req,res) => {
         }
 
     }
-    
+
     const userBubble = await models.Bubble.findOne({
         where:{
            id: bubble.id
