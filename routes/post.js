@@ -19,27 +19,11 @@ router.get("/:bubbleid", async (req,res) => {
 
 
 //Create Post
-router.post("/create-post", async (req, res) => {
+router.post("/create-post/:bubbleid", async (req, res) => {
     let body = req.body.body
-    let user = req.body.user_id
+    let user = req.body.user_ids
+    let bubbleId = req.params.bubbleid
 
-    //will pass bubbles from global redux
-    let bubbles = [
-        {
-          "id": 2,
-          "title": "deez",
-          "bubble_status": "green",
-          "createdAt": "2020-12-03T08:46:13.339Z",
-          "updatedAt": "2020-12-03T08:46:13.339Z"
-        },
-        {
-          "id": 8,
-          "title": "some bubble",
-          "bubble_status": "green",
-          "createdAt": "2020-12-03T09:03:22.631Z",
-          "updatedAt": "2020-12-03T09:03:22.631Z"
-        }
-      ]
    
       
  
@@ -53,14 +37,12 @@ router.post("/create-post", async (req, res) => {
        let post = createPost
        const postid = post.id
        
-       for (const bubble of bubbles){
        let bubblepost = models.Bubblepost.create({
           PostId: postid,
-          BubbleId: bubble.id,
+          BubbleId: bubbleId,
        })
-    }
-       res.send('Post Successful')
-
+    
+      res.send('Post Successful')
 }
 })
 
