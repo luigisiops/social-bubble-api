@@ -29,7 +29,7 @@ router.post("/create-post/:bubbleid", async (req, res) => {
  
  //mad dumb but build doesnt define the id in the promise but create does also create saves to db without save method(findOneOrCreate also works)
     if (user) {
-       let createPost = await models.Post.create({
+       const createPost = await models.Post.create({
              UserId: user,
              body: body
        })
@@ -37,12 +37,22 @@ router.post("/create-post/:bubbleid", async (req, res) => {
        let post = createPost
        const postid = post.id
        
-       let bubblepost = models.Bubblepost.create({
+       const newpost = await models.Bubblepost.create({
           PostId: postid,
           BubbleId: bubbleId,
        })
+
+       const Bubblepost = await models.Bubblepost.findOne({
+         where: { id: newpost.id}, include:[
+            {
+               model: models.Post,
+                  include:[
+                     models.User
+                  ]}
+            ]
+       })
     
-      res.send(bubblepost)
+      res.send(Bubblepost)
 }
 })
 
@@ -62,7 +72,7 @@ router.delete("/:postid/delete-post", async(req,res) => {
       }
    })
 
-   res.send(post)
+   res.send({})
 
 })
 
