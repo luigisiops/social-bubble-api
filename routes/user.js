@@ -50,26 +50,25 @@ router.get("/:userid/bubbles", async (req, res) => {
 //change status of a user and their bubbles
 router.post("/:userid/update-status", async (req,res) => {
     const user_id = req.params.userid
-    const status = req.body.status
+    const status = req.body.user_status
     const bubbleArray = []
+    const bubbles = []
 
-    //will pass bubbles from global redux
-    let bubbles = [
-        {
-            "id": 2,
-            "title": "deez",
-            "bubble_status": "green",
-            "createdAt": "2020-12-03T08:46:13.339Z",
-            "updatedAt": "2020-12-03T08:46:13.339Z"
-        },
-        {
-            "id": 8,
-            "title": "some bubble",
-            "bubble_status": "green",
-            "createdAt": "2020-12-03T09:03:22.631Z",
-            "updatedAt": "2020-12-03T09:03:22.631Z"
+    const bubbleUsers = await models.BubbleUser.findAll({
+        where:{
+           UserId: user_id
         }
-    ]
+     })
+
+    for (const bubbleUser of bubbleUsers){
+        const abubble = await models.Bubble.findOne({
+            where:{
+               id: bubbleUser.BubbleId
+            }
+         })
+         bubbles.push(abubble)
+      }
+
 
     const userUpdate = await models.User.update(
             {user_status: status},
