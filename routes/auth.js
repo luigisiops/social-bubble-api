@@ -24,20 +24,21 @@ router.post("/register", (req, res) => {
    const lastName = req.body.lastName
    const email = req.body.email
    const password = req.body.password
-   bcrypt.hash(password, saltRounds, (err, hash) => {
+   bcrypt.hash(password, saltRounds, async(err, hash) => {
       if (err) {
          console.log(err)
       }
-      let newUser = models.User.create({
+      let newUser = await models.User.create({
          first_name: firstName,
          last_name: lastName,
          email: email,
+         user_status: "green",
          password: hash,
       })
 
-   newUser.save().then(() => {
+
          res.send(newUser)
-      }) 
+
    })
 })
 // const verifyJWT = (req, res, next) => {
