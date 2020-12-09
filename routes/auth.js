@@ -92,10 +92,8 @@ router.post("/login", (req, res) => {
             { email: email },
             "jwtSecret"
           );
-          console.log(token);
-          console.log("true");
           res.json({
-            message: "Loggin Success!",
+            message: "Login Success!",
             success: true,
             token: token,
           });
