@@ -31,11 +31,8 @@ router.get("/:bubbleid/users", async (req, res) => {
    res.send(bubbleUsers)
 
 })
-
-<<<<<<< HEAD
 //create a bubble
-=======
->>>>>>> 6036e0dbcb3b17829965328a5113ee0c2222d915
+
 router.post("/create-bubble", async (req, res) => {
    let title = req.body.title
    //will pass user id from React/Redux

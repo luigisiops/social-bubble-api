@@ -42,7 +42,7 @@ router.post("/create-post/:bubbleid", async (req, res) => {
           BubbleId: bubbleId,
        })
     
-      res.send(bubblepost)
+      res.send(createPost)
 }
 })
 
@@ -62,7 +62,7 @@ router.delete("/:postid/delete-post", async(req,res) => {
       }
    })
 
-   res.send(post)
+   res.send({})
 
 })
 
