@@ -42,7 +42,7 @@ router.post("/create-post/:bubbleid", async (req, res) => {
           BubbleId: bubbleId,
        })
     
-      res.send('Post Successful')
+      res.send(bubblepost)
 }
 })
 
@@ -56,13 +56,13 @@ router.delete("/:postid/delete-post", async(req,res) => {
       }
    })
    
-   await models.Post.destroy({
+   const post = await models.Post.destroy({
       where: {
          id: postid
       }
    })
 
-   res.send('Post Successfully Deleted')
+   res.send(post)
 
 })
 
