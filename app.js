@@ -30,7 +30,7 @@ const userRouter = require("./routes/user")
 
 
 
-const PORT = 8080
+const PORT = process.env.PORT || 8080
 
 
 app.use(express.json())
