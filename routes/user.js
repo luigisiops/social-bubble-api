@@ -7,10 +7,11 @@ const models = require("../models")
 // update user status on dashboard
 router.put('/:userid/status', async (req, res) => {
     let userid = req.params.userid
+    let status = req.body.user_status
     // let userStatus = req.body.userStatus
 
     // test status DELETE
-    let userStatus = 'red'
+    let userStatus = status
 
     const userUpdate = await models.User.update(
         {user_status: userStatus},
@@ -130,6 +131,7 @@ router.post("/:userid/update-status", async (req,res) => {
         }
 
     }
+    
     const userBubble = await models.Bubble.findOne({
         where:{
            id: bubble.id
